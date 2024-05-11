@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+LOG_FILE="$1"
+
+
+if [ ! -f "$LOG_FILE" ];then
+    echo "Error:Log file not found."
+    exit 1
+file
+
+
+requests_per_day=$(awk -F'[][]' '{print $2}' "$LOG_FILE" | cut -d':' -f1-2 | sort | uniq -c | sort -nr | head -n 10)
+
+requests_per_ip=$(awk '{print $1}' "$LOG_FILE" | sort | uniq -c | sort -nr | head -n 10)
+
+echo "Requests Per Day (top 10):"
+echo "$requests_per_day" | awk '{printf "%d %s\n", $1, $2}'
+echo
+echo "Requests Per IP (top 10):"
+echo "$requests_per_ip" | awk '{printf "%d %s\n", $1, $2}'
