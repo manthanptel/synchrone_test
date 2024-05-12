@@ -1,11 +1,50 @@
+## Task 1 For TerraForm Scripting 
 
 
-<HTML>Task 2 For Bash Scripting </HTML>HTML
+
+You and your team are working on a project in AWS. At the very beginning, you just created resources by clicking in the Developer Console, but as your project grew, you found it problematic to remember all the steps needed every time. You decided to start from scratch and use an automation tool so that you can easily create multiple environments, or recreate them if something bad happens.
+You and your team have decided to go with Terraform. The first elements that need to be created are the S3 bucket and the SQS queue. These elements are connected together because the queue should be notified when someone uploads any file to S3.
+You have prepared the requirements and now you're ready to implement them in Terraform.
+
+
+#### Objectives
+
+* There should be an S3 bucket referenced in Terraform as ```bucket``` and named ```upload-bucket``` . The ACL should be ```private```. 
+* There should be an SQS queue referenced in Terraform as ```queue``` and named ```upload-queue``` .
+* The above queue should have a delay specified as 60 seconds, a max message size of 8kB, should discard messages after 48 hours and should wait for up to 15 seconds for messages to be received.
+* There should be an IAM policy document created as Terraform ```data``` , referenced as ```iam_notif_policy_doc``` , which should describe the policy that will be used by the bucket notification hook to post messages to the queue, or you can use EOF expression in policy and omit this step.
+* The above document should contain one statement with id equal to ```1``` . 
+* The above statement should work only for the ```upload-bucket``` should be tested by checking if the source ```ARN``` matches. 
+* The above statement should work only on ```upload-queue``` and it should allow messages to be sent to it.
+*  The above statement should use the ```AWS``` type of principal with identifiers set to ```*``` .
+* The above document should be used to create the ```upload-queue``` policy referenced in Terraform as ```notif_policy``` . You may as well use inline policy implementing the same thing instead of using policy document. 
+* Finally, bucket notification should be enabled (referenced in Terraform as ```bucket_notif``` ) to send a message to ```upload-queue``` object is created in upload-bucket.
+* All references to other resources should be specified as Terraform identifiers, not as text.
+
+#### Hints
+* Please remember that 1kB is 1024 bytes.
+* Don't change the AWS provider version.
+* Variables definition are forbidden as they won't be provided to the command, but you may use locals.
+* ```terraform init``` is already executed in the environment
+* The code cannot contain any syntax errors or warnings (e.g. regarding deprecations).
+* The actual errors will be shown as a test results. The "compilation successful" message is irrelevant for this task.
+
+
+#### Versions
+* AWS Provider version is 3.30.0
+* Terraform 0.14.7
+
+
+
+
+
+
+## Task 2 For Bash Scripting 
 
 
 You are working on a site and need to perform Apache access log analysis.
 The IT team needs statistics on requests per day and requests per IP.
-• Bash version 5.0 is installed, and your script will run on Debian Linux Your task
+* Bash version 5.0 is installed, and your script will run on Debian Linux Your task
 Create a Bash script to parse and analyze the Apache access log file. The path to the log file is passed as the first parameter to the script (the initial solution stores the log file path in the LOG_FILE variable). This means that if your script is stored in solution.sh, it can be called a bash solution.sh /var/log/access.log, and should analyze this specific log file.
 You need to output two statistics, limited to the top 10 results and sorted numerically by quantity from highest to lowest value without leading blanks and that lines with greater key
 values appear earlier in the output instead of later.
@@ -34,6 +73,7 @@ The Apache log has the following example content:# synchrone_test
 The first statistic is requests per day.
 The day value is located in brackets in every log entry and must be extracted to have only a date value without a time: for example
 16/Feb/2020. The correct output for this statistic using the above example log is:
+
 ```
 2 26/Jul/2019
 1 25/Jul/2019
