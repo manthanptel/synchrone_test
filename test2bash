@@ -17,3 +17,30 @@ echo "$requests_per_day" | awk '{printf "%d %s\n", $1, $2}'
 echo
 echo "Requests Per IP (top 10):"
 echo "$requests_per_ip" | awk '{printf "%d %s\n", $1, $2}'
+
+
+______________
+
+
+
+#!/bin/bash
+
+# Check if a log file path is provided
+if [ -z "$1" ]; then
+    echo "Usage: $0 <path_to_access_log>"
+    exit 1
+fi
+
+LOG_FILE="$1"
+
+# Statistic 1: Requests per day
+requests_per_day=$(awk '{print substr($4, 2, 12)}' "$LOG_FILE" | sort | uniq -c | sort -nr | head -n 10)
+
+echo "Requests per day:"
+echo "$requests_per_day" | awk '{print $1, $2}'
+
+# Statistic 2: Requests per IP
+requests_per_ip=$(awk '{print $1}' "$LOG_FILE" | sort | uniq -c | sort -nr | head -n 10)
+
+echo -e "\nRequests per IP:"
+echo "$requests_per_ip" | awk '{print $1, $2}'
