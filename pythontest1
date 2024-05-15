@@ -1,0 +1,29 @@
+def solution(N):
+    # Define a function to calculate the sum of digits of a number
+    def digit_sum(num):
+        # Convert the number to a string and then to a list of its digits
+        digits = [int(digit) for digit in str(num)]
+        # Calculate the sum of the digits
+        return sum(digits)
+
+    # Calculate the sum of digits of N
+    sum_of_digits_N = digit_sum(N)
+
+    # Start checking numbers greater than N
+    next_number = N + 1
+    while True:
+        # Calculate the sum of digits of the next number
+        sum_of_digits_next_number = digit_sum(next_number)
+        
+        # Check if the sum of digits of the next number is equal to the sum of digits of N
+        if sum_of_digits_next_number == sum_of_digits_N:
+            return next_number
+        
+        # Increment the next number for the next iteration
+        next_number += 1
+
+# Test cases
+print(solution(28))   # Output: 37
+print(solution(734))  # Output: 743
+print(solution(1990)) # Output: 2089
+print(solution(1000)) # Output: 10000

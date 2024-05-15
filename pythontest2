@@ -1,0 +1,27 @@
+def solution(A):
+    # Count the occurrences of each number in the array
+    num_count = {}
+    for num in A:
+        if num in num_count:
+            num_count[num] += 1
+        else:
+            num_count[num] = 1
+    
+    # Initialize a variable to keep track of whether all numbers can be paired
+    all_paired = True
+    
+    # Iterate through the counts of each number
+    for count in num_count.values():
+        # Check if the count is even
+        if count % 2 != 0:
+            # If the count is odd, not all numbers can be paired
+            all_paired = False
+            break
+    
+    # Return the result
+    return all_paired
+
+# Test cases
+print(solution([1, 2, 2, 1])) # Output: True
+print(solution([7, 7, 7]))     # Output: False
+print(solution([1, 2, 2, 3]))  # Output: False
