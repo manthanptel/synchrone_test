@@ -1,0 +1,24 @@
+def solution(A):
+    # Sort the array
+    A_sorted = sorted(A)
+    
+    # Initialize a variable to keep track of whether two elements differ by 1
+    found_diff_by_1 = False
+    
+    # Iterate through the sorted array
+    for i in range(len(A_sorted) - 1):
+        # Check if the difference between adjacent elements is 1
+        if A_sorted[i + 1] - A_sorted[i] == 1:
+            # If the difference is 1, set the flag to True and break the loop
+            found_diff_by_1 = True
+            break
+    
+    # Return the result
+    return found_diff_by_1
+
+# Test cases
+print(solution([7]))               # Output: False
+print(solution([4, 3]))            # Output: True
+print(solution([11, 1, 8, 12, 14]))# Output: True
+print(solution([4, 10, 8, 5, 9]))  # Output: True
+print(solution([5, 5, 5, 5, 5]))    # Output: False
