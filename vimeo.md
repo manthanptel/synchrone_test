@@ -101,9 +101,17 @@ Use a loop or scheduler to periodically check the CPU utilization and adjust rep
 ## 1 Imports and Constants:
 
 ```argparse``` to handle command-line arguments.
+
+
 ```time``` for sleep intervals.
+
+
 ```requests``` to make HTTP requests.
+
+
 ```Flask``` to create the web server.
+
+
 Define the target CPU utilization and check interval.
 
 ## 2 Helper Functions:
