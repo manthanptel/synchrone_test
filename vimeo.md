@@ -73,3 +73,72 @@ contain JSON in the following format.
 }
 The replicas key should have an integer value greater than one. Invalid values
 will return HTTP 400 Bad Request.
+
+
+
+
+___________________________________
+
+To implement the auto-scaler as described, we can create a Python application that periodically checks the CPU utilization and adjusts the number of replicas accordingly. We'll use the requests library to interact with the REST API. Here's a step-by-step guide to achieve this:
+
+## 1 Set up the environment: Ensure you have Python installed along with the requests library.
+
+## 2 Define the auto-scaler logic:
+
+Monitor CPU utilization.
+Adjust the number of replicas to maintain an average CPU utilization of 0.80 (80%).
+Handle occasional API errors gracefully.
+
+## 3 Implement the auto-scaler:
+
+Start a Flask application that listens on a specified port.
+Use a loop or scheduler to periodically check the CPU utilization and adjust replicas.
+
+
+### Explanation
+
+
+## 1 Imports and Constants:
+
+```argparse``` to handle command-line arguments.
+```time``` for sleep intervals.
+```requests``` to make HTTP requests.
+```Flask``` to create the web server.
+Define the target CPU utilization and check interval.
+
+## 2 Helper Functions:
+
+```get_app_status():``` Fetches the current status of the application.
+
+
+```set_replicas(replicas):``` Updates the number of replicas.
+
+
+```adjust_replicas():``` Adjusts the replicas based on the CPU utilization.
+
+
+
+## 3 Flask Routes:
+
+```/start```: Starts the auto-scaler in a separate thread.
+
+## 4 Main:
+
+Parse the port from command-line arguments and start the Flask app on that port.
+
+
+### Usage
+
+## 1 Run the auto-scaler:
+
+
+
+```
+python autoscaler.py --port 8123
+```
+
+### 2 Start the auto-scaling process:
+
+Open a browser or use curl to visit http://localhost:8123/start.
+This will start the auto-scaler, which will periodically check the CPU utilization and adjust the number of replicas accordingly to maintain an average CPU utilization of 0.80.
+
