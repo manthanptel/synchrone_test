@@ -1,0 +1,63 @@
+import argparse
+import time
+import requests
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+API_BASE_URL = "http://localhost:8123/app"
+TARGET_CPU_UTILIZATION = 0.80
+CHECK_INTERVAL = 10  # seconds
+
+current_replicas = 1
+
+def get_app_status():
+    try:
+        response = requests.get(f"{API_BASE_URL}/status", headers={"Accept": "application/json"})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Error fetching app status: {e}")
+        return None
+
+def set_replicas(replicas):
+    try:
+        response = requests.put(f"{API_BASE_URL}/replicas", json={"replicas": replicas}, headers={"Content-Type": "application/json"})
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        print(f"Error setting replicas: {e}")
+        return None
+
+def adjust_replicas():
+    global current_replicas
+    status = get_app_status()
+    if status:
+        cpu_utilization = status["cpu"]["highPriority"]
+        print(f"Current CPU utilization: {cpu_utilization}, Current replicas: {current_replicas}")
+        
+        if cpu_utilization > TARGET_CPU_UTILIZATION:
+            current_replicas += 1
+        elif cpu_utilization < TARGET_CPU_UTILIZATION and current_replicas > 1:
+            current_replicas -= 1
+        
+        set_replicas(current_replicas)
+        print(f"Adjusted replicas to: {current_replicas}")
+
+@app.route('/start', methods=['GET'])
+def start_autoscaler():
+    def run_autoscaler():
+        while True:
+            adjust_replicas()
+            time.sleep(CHECK_INTERVAL)
+    
+    import threading
+    threading.Thread(target=run_autoscaler).start()
+    return jsonify({"message": "Autoscaler started"}), 200
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Auto-scaler for managing replicas based on CPU utilization")
+    parser.add_argument('--port', type=int, default=8123, help='Port to start the auto-scaler on')
+    args = parser.parse_args()
+
+    app.run(port=args.port)
